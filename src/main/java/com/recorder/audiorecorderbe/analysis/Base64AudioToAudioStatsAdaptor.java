@@ -11,12 +11,15 @@ public class Base64AudioToAudioStatsAdaptor implements IAudioStats {
     private String wrappedAudioData;
     private final String audioFileURL = "/app/files/audio";
     private IAudioFileAnalyser audioAnalyser;
+    private AudioConverter converter;
 
     public Base64AudioToAudioStatsAdaptor(String audio){ 
         this.wrappedAudioData = audio;
         this.audioAnalyser = new AudioFileAnalyser();
+        this.converter = new AudioConverter();
         try {
             this.decodeAudioToFile();
+            this.converter.convertWEbMToMP3(this.audioFileURL);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

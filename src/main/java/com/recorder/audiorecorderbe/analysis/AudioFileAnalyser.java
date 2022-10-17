@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioHeader;
 
@@ -13,18 +12,13 @@ public class AudioFileAnalyser implements IAudioFileAnalyser{
 
     @Override
     public String getDuration(String url) {
-        
-        File target = new File(url);
-        AudioFile f;
         SimpleDateFormat timeInFormat = new SimpleDateFormat("ss", Locale.UK);
         SimpleDateFormat timeOutFormat = new SimpleDateFormat("mm:ss", Locale.UK);
         SimpleDateFormat timeOutOverAnHourFormat = new SimpleDateFormat("kk:mm:ss", Locale.UK);
         String formattedLength = "";
         long length = 0;
-
         try {
-            f = AudioFileIO.read(target);
-            AudioHeader ah = f.getAudioHeader();
+            AudioHeader ah = getAudioHeader(url);
             length = (long)ah.getTrackLength();
             Date timeIn;
             synchronized(timeInFormat) {
@@ -39,10 +33,9 @@ public class AudioFileAnalyser implements IAudioFileAnalyser{
                     formattedLength = timeOutOverAnHourFormat.format(timeIn);
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
-            formattedLength = "Error processing audio time: ".concat(e.getMessage());
+            formattedLength = "!Error processing audio time! ".concat(e.getMessage());
         }    
 
         return formattedLength;
@@ -61,7 +54,7 @@ public class AudioFileAnalyser implements IAudioFileAnalyser{
     }
 
     private AudioHeader getAudioHeader(String url) throws Exception { 
-        return AudioFileIO.read(new File(url)).getAudioHeader();
+        return AudioFileIO.read(new File(String.format("%s.mp3", url))).getAudioHeader();
     }
     
 }
