@@ -1,11 +1,14 @@
 package com.recorder.audiorecorderbe.recording;
 
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import java.io.IOException;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.recorder.audiorecorderbe.analysis.IAudioStats;
+import com.recorder.audiorecorderbe.analysis.Base64AudioToAudioStatsAdaptor;
 
 @RestController
 public class RecordAudioController {
@@ -15,13 +18,9 @@ public class RecordAudioController {
         return "Record Controller is Working";
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/record")
-    String getRecordingResponse(@RequestBody MultiValueMap<String, String> formData) {
-        System.out.println("POST POST POST");
-        System.out.println(formData);
-        return "{ \"data\": \"not yet implemented\" }";
+    IAudioStats getRecordingResponse(@RequestBody String  base64AudioData) throws IOException {
+        return new Base64AudioToAudioStatsAdaptor(base64AudioData);
     }
-
-    
+ 
 }
