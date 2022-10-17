@@ -5,7 +5,7 @@ echo 'Attempting to build docker image'
 ./mvnw package
 
 # Create docker image 
-docker build -t emotech-be .
+docker build -t audio-recorder-be .
 
 # Run docker image
-docker run -p 8080:8080 emotech-be
+docker run -p 8080:8080 audio-recorder-be
